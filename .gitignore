@@ -1,0 +1,7 @@
+database/*
+.env
+logs/mysql/*
+logs/php/*
+logs/nginx/*
+
+
