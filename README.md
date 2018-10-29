@@ -41,10 +41,9 @@ DOCUMENT ROOT сайта - web/
 Каталог конфигураций docker - /docker
 
 
-
+Установка Битрикс
+=================
 При необходимости чистой установки 1С-битрикс расположить в каталоге web скрипт http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php .  
-
-
 
 Для настройки подключения к базе использовать хост mysql, пользователь/бд site, пароль xV1S1YQFLwL1 (настраивается в docker-compose.yml)
 
