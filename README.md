@@ -32,7 +32,14 @@ TODO
 
 Структура каталогов
 =========
-DOCUMENT_ROOT сайта - web/
+DOCUMENT ROOT сайта - web/
+
+Каталог логов всех сервисов - logs/
+
+Каталог файлов БД - database/
+
+Каталог конфигураций docker - /docker
+
 
 
 При необходимости чистой установки 1С-битрикс расположить в каталоге web скрипт http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php .  
