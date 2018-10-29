@@ -29,7 +29,14 @@ TODO
 
 `docker-compose up`
 
-При необходимости чистой установки 1С-битрикс расположить в каталоге web скрипт http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php
+Структура каталогов
+=========
+DOCUMENT_ROOT сайта - web/
+
+
+При необходимости чистой установки 1С-битрикс расположить в каталоге web скрипт http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php .  
+
+
 
 Для настройки подключения к базе использовать хост mysql, пользователь/бд site, пароль xV1S1YQFLwL1 (настраивается в docker-compose.yml)
 
