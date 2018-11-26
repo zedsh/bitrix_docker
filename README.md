@@ -46,6 +46,7 @@ cd docker
 Структура каталогов
 =========
 DOCUMENT ROOT сайта - public/
+
 Каталог docker (логи, конфигурация, бд) - /docker
 
 
