@@ -1,13 +1,21 @@
 FROM phpdockerio/php71-fpm
 
 RUN mkdir -p /var/run/mysqld
+RUN mkdir -p /run/php
 
 ARG APP_ENV='prod'
 ARG APP_ENV=${APP_ENV} 
 ENV APP_ENV ${APP_ENV}
+
+ARG USER='www-data'
+ARG USER=${USER} 
+ENV USER ${USER}
+
+
+
 RUN echo `test ${APP_ENV} '=' 'local' &&  echo "${APP_ENV} php-xdebug on" || echo "${APP_ENV} php-xdebug off"`
 
-ADD ./local /etc/apt/apt.conf.d/local
+ADD ./conf/local /etc/apt/apt.conf.d/local
 
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
@@ -24,11 +32,13 @@ RUN apt-get update \
 
 
 
-ADD ./php.ini /etc/php/7.1/fpm/php.ini
-ADD ./php.ini /etc/php/7.1/cli/php.ini
-
+ADD ./conf/php.ini /etc/php/7.1/fpm/php.ini
+ADD ./conf/php.ini /etc/php/7.1/cli/php.ini
+ADD ./conf/www.conf /etc/php/7.1/fpm/pool.d/www.conf
+RUN sed -i -e "s/#USER#/$USER/g" /etc/php/7.1/fpm/pool.d/www.conf
+RUN rm -f /etc/php/7.1/fpm/pool.d/z-overrides.conf
 # MSMTP
-ADD msmtprc /etc/msmtprc
+ADD ./conf/msmtprc /etc/msmtprc
 RUN chmod 0600 /etc/msmtprc && \
     chown www-data:www-data /etc/msmtprc && \
     mkdir -p /var/log/msmtp \
