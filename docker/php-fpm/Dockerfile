@@ -1,5 +1,7 @@
 FROM phpdockerio/php71-fpm
 
+RUN mkdir -p /var/run/mysqld
+
 ARG APP_ENV='prod'
 ARG APP_ENV=${APP_ENV} 
 ENV APP_ENV ${APP_ENV}
@@ -33,7 +35,5 @@ RUN chmod 0600 /etc/msmtprc && \
     touch /var/log/msmtp/msmtp.log && \
     chmod 775 /var/log/msmtp/msmtp.log && \
     chown www-data:www-data /var/log/msmtp/msmtp.log
-
-RUN usermod -u 1000 www-data
 
 EXPOSE 9000

@@ -2,8 +2,12 @@ version: '2'
 
 services:
   nginx:
-    build: ./docker/nginx
-    container_name: nginx
+    build: 
+        context: ./docker/nginx
+        dockerfile: ./Dockerfile
+        args:
+            USER: "${USER}"
+    container_name: "${PROJECT_PREFIX}nginx"
     ports:
     - "${DOCKER_HTTP_PORT}:80"
     - "${DOCKER_HTTPS_PORT}:443"
@@ -14,14 +18,19 @@ services:
     - ./web:/var/www/web
     - /etc/timezone:/etc/timezone:ro
     - /etc/localtime:/etc/localtime:ro
+    - /etc/passwd:/etc/passwd:ro
+    - /etc/group:/etc/group:ro
     restart: unless-stopped
+    environment:
+        - APP_ENV=${APP_ENV}
+
   php71-fpm:
     build:
         context: ./docker/php-fpm/
         dockerfile: ./Dockerfile
         args:
             APP_ENV: "${APP_ENV}"
-    container_name: php71-fpm
+    container_name: "${PROJECT_PREFIX}php71-fpm"
     networks:
     - site
     volumes:
@@ -29,15 +38,22 @@ services:
     - /etc/timezone:/etc/timezone:ro
     - /etc/localtime:/etc/localtime:ro
     - ./logs/mail:/var/log/msmtp
+    - ./docker/sockets/mysqld:/var/run/mysqld
+    - /etc/passwd:/etc/passwd:ro
+    - /etc/group:/etc/group:ro
+
     restart: unless-stopped
+    #user: ${USER_ID}
     environment:
         - APP_ENV=${APP_ENV}
   mysql:
     build:
         context: ./docker/mysql/
         dockerfile: ./Dockerfile
-    container_name: mysql
-    user: ${MYSQL_USER_ID}
+        args:
+            USER: "${USER}"
+
+    container_name: "${PROJECT_PREFIX}mysql"
     environment:
       MYSQL_DATABASE: site
       MYSQL_USER: site
@@ -49,10 +65,14 @@ services:
     - ./database:/var/lib/mysql
     - /etc/timezone:/etc/timezone:ro
     - /etc/localtime:/etc/localtime:ro
+    - ./docker/sockets/mysqld:/var/run/mysqld
+    - /etc/passwd:/etc/passwd:ro
+    - /etc/group:/etc/group:ro
+    user: "1000"
     restart: unless-stopped
   memcached:
     image: memcached:1.5-alpine
-    container_name: memcached
+    container_name: "${PROJECT_PREFIX}memcached"
     entrypoint:
     - memcached
     - --memory-limit=1024m
@@ -68,4 +88,4 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.16.1.0
+      - subnet: 172.16.1.0/24
